@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-posts-ingress
+  namespace: master
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: posts.minikube
+    http:
+      paths:
+      - backend:
+          serviceName: api-posts
+          servicePort: 80

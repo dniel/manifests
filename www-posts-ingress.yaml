@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: www
+  namespace: blogr
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: www.dniel.in
+    http:
+      paths:
+      - backend:
+          serviceName: www
+          servicePort: 80

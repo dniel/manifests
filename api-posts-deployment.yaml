@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta2 # for versions before 1.7.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: posts-deployment
+  namespace: master
+  labels:
+    app: api-posts
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-posts
+  template:
+    metadata:
+      labels:
+        app: api-posts
+    spec:
+      containers:
+      - name: api-posts
+        image: dniel/api-posts
+        ports:
+        - containerPort: 4567
+

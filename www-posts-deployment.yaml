@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta2 # for versions before 1.7.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: www
+  namespace: blogr
+  labels:
+    app: www
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: www
+  template:
+    metadata:
+      labels:
+        app: www
+    spec:
+      containers:
+      - name: www
+        image: dniel/blogr-www
+        ports:
+        - containerPort: 80
+
