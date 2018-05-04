@@ -1,23 +1,33 @@
-apiVersion: apps/v1beta2 # for versions before 1.7.0 use apps/v1beta1
-kind: Deployment
-metadata:
-  name: www
-  namespace: blogr
-  labels:
-    app: www
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
+- apiVersion: apps/v1beta2
+  kind: Deployment
+  metadata:
+    labels:
       app: www
-  template:
-    metadata:
-      labels:
+    name: www
+    namespace: blogr
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
         app: www
-    spec:
-      containers:
-      - name: www
-        image: dniel/blogr-www
-        ports:
-        - containerPort: 80
-
+    template:
+      metadata:
+        labels:
+          app: www
+      spec:
+        containers:
+          - image: index.docker.io/dniel/blogr-www
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 80
+              initialDelaySeconds: 15
+              periodSeconds: 20
+            name: blogr-www
+            ports:
+              - containerPort: 80
+            readinessProbe:
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              tcpSocket:
+                port: 80
