@@ -1,33 +1,33 @@
 apiVersion: apps/v1beta2
-  kind: Deployment
-  metadata:
-    labels:
+kind: Deployment
+metadata:
+  labels:
+    app: www
+  name: www
+  namespace: blogr
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
       app: www
-    name: www
-    namespace: blogr
-  spec:
-    replicas: 3
-    selector:
-      matchLabels:
+  template:
+    metadata:
+      labels:
         app: www
-    template:
-      metadata:
-        labels:
-          app: www
-      spec:
-        containers:
-          - image: index.docker.io/dniel/blogr-www
-            livenessProbe:
-              httpGet:
-                path: /
-                port: 80
-              initialDelaySeconds: 15
-              periodSeconds: 20
-            name: blogr-www
-            ports:
-              - containerPort: 80
-            readinessProbe:
-              initialDelaySeconds: 5
-              periodSeconds: 10
-              tcpSocket:
-                port: 80
+    spec:
+      containers:
+        - image: index.docker.io/dniel/blogr-www
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          name: blogr-www
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            tcpSocket:
+              port: 80
