@@ -32,19 +32,3 @@ spec:
             periodSeconds: 10
             tcpSocket:
               port: 80
----
-apiVersion: apps/v1beta2
-kind: Ingress
-metadata:
-  name: www
-  namespace: blogr
-  annotations:
-    kubernetes.io/ingress.class: traefik
-spec:
-  rules:
-  - host: www.dniel.in
-    http:
-      paths:
-      - backend:
-          serviceName: www
-          servicePort: 80
