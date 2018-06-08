@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-posts
-        image: dniel/api-posts
+        image: index.docker.io/dniel/api-posts
         ports:
         - containerPort: 4567
 
