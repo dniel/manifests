@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
         - name: forwardauth
-          image: image: index.docker.io/dniel/forwardauth
+          image: index.docker.io/dniel/forwardauth
           imagePullPolicy: Always
           ports:
             - name: http
