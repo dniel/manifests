@@ -1,0 +1,113 @@
+---
+# Source: forwardauth/templates/configmap.yaml
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: forwardauth-config
+#  labels:
+#    app: forwardauth
+#    chart: forwardauth-0.1.0
+#    release: forwardauth
+#    heritage: Tiller
+#data:
+#  application.yaml: TODO: add config here for spring boot app.
+
+---
+# Source: forwardauth/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: forwardauth
+  labels:
+    app: forwardauth
+    chart: forwardauth-0.1.0
+    release: forwardauth
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: forwardauth
+    release: forwardauth
+
+---
+# Source: forwardauth/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forwardauth
+  labels:
+    app: forwardauth
+    chart: forwardauth-0.1.0
+    release: forwardauth
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forwardauth
+      release: forwardauth
+  template:
+    metadata:
+      labels:
+        app: forwardauth
+        release: forwardauth
+    spec:
+      containers:
+        - name: forwardauth
+          image: "index.docker.io/dniel/forwardauth:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+
+# TODO: Fix probes
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: 8080
+#          readinessProbe:
+#            httpGet:
+#              path: /actuator/health
+#              port: 8080
+          resources:
+            {}
+            
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: forwardauth-config
+
+---
+# Source: forwardauth/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: forwardauth
+  labels:
+    app: forwardauth
+    chart: forwardauth-0.1.0
+    release: forwardauth
+    heritage: Tiller
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    
+spec:
+  rules:
+    - host: auth.dniel.in
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: forwardauth
+              servicePort: http
+
