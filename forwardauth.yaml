@@ -72,7 +72,7 @@ spec:
               mountPath: /config
           env:
             - name: ENV
-              value: "DEV"
+              value: DEV
           livenessProbe:
             httpGet:
               path: /actuator/health
