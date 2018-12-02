@@ -70,16 +70,17 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /config
-
-# TODO: Fix probes
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: 8080
-#          readinessProbe:
-#            httpGet:
-#              path: /actuator/health
-#              port: 8080
+          env:
+            - name: ENV
+              value: "DEV"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
           resources:
             {}
             
