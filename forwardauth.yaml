@@ -104,14 +104,14 @@ metadata:
     heritage: Tiller
   annotations:
     kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+    traefik.ingress.kubernetes.io/priority: "99999"
     
 spec:
   rules:
-    - host: auth.dniel.in
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: forwardauth
-              servicePort: http
-
+  - http:
+      paths:
+      - backend:
+          serviceName: forwardauth
+          servicePort: http
+        path: /oauth2
