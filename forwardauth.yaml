@@ -48,7 +48,7 @@ metadata:
     release: forwardauth
     heritage: Tiller
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: forwardauth
