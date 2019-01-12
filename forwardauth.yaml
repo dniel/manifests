@@ -1,24 +1,9 @@
 ---
-# Source: forwardauth/templates/configmap.yaml
-#apiVersion: v1
-#kind: ConfigMap
-#metadata:
-#  name: forwardauth-config
-#  labels:
-#    app: forwardauth
-#    chart: forwardauth-0.1.0
-#    release: forwardauth
-#    heritage: Tiller
-#data:
-#  application.yaml: TODO: add config here for spring boot app.
-
----
 # Source: forwardauth/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: forwardauth
-  namespace: kube-system
   labels:
     app: forwardauth
     chart: forwardauth-0.1.0
@@ -34,13 +19,11 @@ spec:
   selector:
     app: forwardauth
     release: forwardauth
-
 ---
 # Source: forwardauth/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: kube-system
   name: forwardauth
   labels:
     app: forwardauth
@@ -61,7 +44,7 @@ spec:
     spec:
       containers:
         - name: forwardauth
-          image: index.docker.io/dniel/forwardauth
+          image: "index.docker.io/dniel/forwardauth:latest"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -71,8 +54,10 @@ spec:
             - name: config-volume
               mountPath: /config
           env:
+            - name: JVM_OPTS
+              value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1          
             - name: ENV
-              value: DEV
+              value: "DEBUG"
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -82,20 +67,20 @@ spec:
               path: /actuator/health
               port: http
           resources:
-            {}
+            limits:
+              memory: 600Mi
+            requests:
+              memory: 600Mi
             
-
       volumes:
         - name: config-volume
           configMap:
             name: forwardauth-config
-
 ---
 # Source: forwardauth/templates/ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: kube-system
   name: forwardauth
   labels:
     app: forwardauth
@@ -111,7 +96,7 @@ spec:
   rules:
   - http:
       paths:
-      - backend:
-          serviceName: forwardauth
-          servicePort: http
-        path: /oauth2
+        - backend:
+            serviceName: forwardauth
+            servicePort: http
+          path: /oauth2
