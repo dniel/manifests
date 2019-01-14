@@ -1,9 +1,24 @@
 ---
+# Source: forwardauth/templates/configmap.yaml
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: forwardauth-config
+#  labels:
+#    app: forwardauth
+#    chart: forwardauth-0.1.0
+#    release: forwardauth
+#    heritage: Tiller
+#data:
+#  application.yaml: TODO: add config here for spring boot app.
+
+---
 # Source: forwardauth/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: forwardauth
+  namespace: kube-system
   labels:
     app: forwardauth
     chart: forwardauth-0.1.0
@@ -24,6 +39,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: kube-system 
   name: forwardauth
   labels:
     app: forwardauth
@@ -44,7 +60,7 @@ spec:
     spec:
       containers:
         - name: forwardauth
-          image: "index.docker.io/dniel/forwardauth:latest"
+          image: index.docker.io/dniel/forwardauth
           imagePullPolicy: Always
           ports:
             - name: http
@@ -68,9 +84,9 @@ spec:
               port: http
           resources:
             limits:
-              memory: 600Mi
+              memory: 512Mi
             requests:
-              memory: 600Mi
+              memory: 512Mi
             
       volumes:
         - name: config-volume
@@ -81,6 +97,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
+  namespace: kube-system
   name: forwardauth
   labels:
     app: forwardauth
