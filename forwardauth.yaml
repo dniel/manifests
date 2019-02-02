@@ -75,12 +75,10 @@ spec:
             - name: ENV
               value: "DEBUG"
           livenessProbe:
-            initialDelaySeconds: 10
             httpGet:
               path: /actuator/health
               port: http
           readinessProbe:
-            initialDelaySeconds: 10
             httpGet:
               path: /actuator/health
               port: http
