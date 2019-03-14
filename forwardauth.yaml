@@ -18,6 +18,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: forwardauth
+  namespace: kube-system
   labels:
     app: forwardauth
     chart: forwardauth-0.1.0
@@ -33,12 +34,12 @@ spec:
   selector:
     app: forwardauth
     release: forwardauth
-
 ---
 # Source: forwardauth/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: kube-system 
   name: forwardauth
   labels:
     app: forwardauth
@@ -59,7 +60,7 @@ spec:
     spec:
       containers:
         - name: forwardauth
-          image: "index.docker.io/dniel/forwardauth:latest"
+          image: index.docker.io/dniel/forwardauth
           imagePullPolicy: Always
           ports:
             - name: http
@@ -68,30 +69,35 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /config
-
-# TODO: Fix probes
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: 8080
-#          readinessProbe:
-#            httpGet:
-#              path: /actuator/health
-#              port: 8080
+          env:
+            - name: JVM_OPTS
+              value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1          
+            - name: ENV
+              value: "DEBUG"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
           resources:
-            {}
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 512Mi
             
-
       volumes:
         - name: config-volume
           configMap:
             name: forwardauth-config
-
 ---
 # Source: forwardauth/templates/ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
+  namespace: kube-system
   name: forwardauth
   labels:
     app: forwardauth
@@ -100,14 +106,14 @@ metadata:
     heritage: Tiller
   annotations:
     kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+    traefik.ingress.kubernetes.io/priority: "99999"
     
 spec:
   rules:
-    - host: auth.dniel.in
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: forwardauth
-              servicePort: http
-
+  - http:
+      paths:
+        - backend:
+            serviceName: forwardauth
+            servicePort: http
+          path: /oauth2
