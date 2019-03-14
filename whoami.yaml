@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
         - name: whoami-helm-chart
-          image: "containous/whoami:latest"
+          image: index.docker.io/containous/whoami
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
