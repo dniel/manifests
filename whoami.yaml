@@ -66,6 +66,9 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: whoami-whoami-helm-chart
+  annotations:
+    ingress.kubernetes.io/auth-type: forward
+    ingress.kubernetes.io/auth-url: http://forwardauth/authorize
   labels:
     app: whoami-helm-chart
     chart: whoami-helm-chart-0.1.0
