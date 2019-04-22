@@ -195,7 +195,33 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: unifi
+  name: unifi-gui
+  labels:
+    app.kubernetes.io/name: unifi
+    helm.sh/chart: unifi-0.4.0
+    app.kubernetes.io/instance: unifi
+    app.kubernetes.io/managed-by: Tiller
+  annotations:
+    ingress.kubernetes.io/auth-type: forward
+    ingress.kubernetes.io/auth-url: http://forwardauth/authorize
+    ingress.kubernetes.io/auth-response-headers: Authorization,X-FORWARDAUTH-NAME,X-FORWARDAUTH-SUB,X-FORWARDAUTH-EMAIL  
+    kubernetes.io/ingress.class: traefik
+    
+spec:
+  rules:
+    - host: unifi.dniel.se
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: unifi-gui
+              servicePort: https-gui
+---        
+# Source: unifi/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: unifi-inform
   labels:
     app.kubernetes.io/name: unifi
     helm.sh/chart: unifi-0.4.0
@@ -209,14 +235,7 @@ spec:
     - host: unifi.dniel.se
       http:
         paths:
-          - path: /
-            backend:
-              serviceName: unifi-gui
-              servicePort: https-gui
-    - host: inform.dniel.se
-      http:
-        paths:
-          - path: /
+          - path: /inform
             backend:
               serviceName: unifi-controller
               servicePort: controller
