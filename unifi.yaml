@@ -212,8 +212,7 @@ spec:
     - host: unifi.dniel.se
       http:
         paths:
-          - path: /
-            backend:
+          - backend:
               serviceName: unifi-gui
               servicePort: https-gui
 ---        
