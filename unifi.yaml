@@ -27,7 +27,7 @@ metadata:
     app.kubernetes.io/instance: unifi
     app.kubernetes.io/managed-by: Tiller
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 8080
       targetPort: controller
@@ -49,7 +49,7 @@ metadata:
     app.kubernetes.io/instance: unifi
     app.kubernetes.io/managed-by: Tiller
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 10001
       targetPort: discovery
@@ -93,7 +93,7 @@ metadata:
     app.kubernetes.io/instance: unifi
     app.kubernetes.io/managed-by: Tiller
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 3478
       targetPort: stun
@@ -163,7 +163,7 @@ spec:
             initialDelaySeconds: 15
           env:
             - name: TZ
-              value: "UTC"
+              value: "UTC+2"
             - name: RUNAS_UID0
               value: "false"
             - name: UNIFI_UID
@@ -190,3 +190,26 @@ spec:
         - name: unifi-data
           persistentVolumeClaim:
             claimName: unifi
+---
+# Source: unifi/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: unifi
+  labels:
+    app.kubernetes.io/name: unifi
+    helm.sh/chart: unifi-0.4.0
+    app.kubernetes.io/instance: unifi
+    app.kubernetes.io/managed-by: Tiller
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    
+spec:
+  rules:
+    - host: unifi.dniel.se
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: unifi-gui
+              servicePort: https-gui
