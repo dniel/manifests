@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
         - name: whoami-helm-chart
-          image: "containous/whoami:latest"
+          image: index.docker.io/containous/whoami
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -66,6 +66,10 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: whoami-whoami-helm-chart
+  annotations:
+    ingress.kubernetes.io/auth-type: forward
+    ingress.kubernetes.io/auth-url: http://forwardauth/authorize
+    ingress.kubernetes.io/auth-response-headers: Authorization,X-FORWARDAUTH-NAME,X-FORWARDAUTH-SUB,X-FORWARDAUTH-EMAIL
   labels:
     app: whoami-helm-chart
     chart: whoami-helm-chart-0.1.0
