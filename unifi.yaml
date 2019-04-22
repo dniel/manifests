@@ -213,3 +213,10 @@ spec:
             backend:
               serviceName: unifi-gui
               servicePort: https-gui
+    - host: inform.dniel.se
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: unifi-controller
+              servicePort: controller
