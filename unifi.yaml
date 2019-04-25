@@ -1,4 +1,14 @@
 ---
+# Source: forwardauth/templates/configmap.yaml
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: forwardauth-config
+#  labels:
+#    app: forwardauth
+#    chart: forwardauth-0.1.0
+#    release: forwardauth
+#    heritage: ---
 # Source: unifi/templates/pvc.yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -186,7 +196,7 @@ spec:
           resources:
             requests:
               memory: "1G"
-           limits:
+            limits:
               memory: "2G"
             
       volumes:
