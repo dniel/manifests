@@ -184,7 +184,10 @@ spec:
               name: unifi-data
               subPath: init.d
           resources:
-            {}
+            requests:
+              memory: "1G"
+           limits:
+              memory: "2G"
             
       volumes:
         - name: unifi-data
