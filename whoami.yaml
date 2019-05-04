@@ -1,12 +1,12 @@
 ---
-# Source: whoami-helm-chart/templates/service.yaml
+# Source: whoami/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: whoami-whoami-helm-chart
+  name: whoami
   labels:
-    app: whoami-helm-chart
-    chart: whoami-helm-chart-0.1.0
+    app: whoami
+    chart: whoami-0.1.0
     release: whoami
     heritage: Tiller
 spec:
@@ -17,33 +17,33 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: whoami-helm-chart
+    app: whoami
     release: whoami
 ---
-# Source: whoami-helm-chart/templates/deployment.yaml
+# Source: whoami/templates/deployment.yaml
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: whoami-whoami-helm-chart
+  name: whoami
   labels:
-    app: whoami-helm-chart
-    chart: whoami-helm-chart-0.1.0
+    app: whoami
+    chart: whoami-0.1.0
     release: whoami
     heritage: Tiller
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: whoami-helm-chart
+      app: whoami
       release: whoami
   template:
     metadata:
       labels:
-        app: whoami-helm-chart
+        app: whoami
         release: whoami
     spec:
       containers:
-        - name: whoami-helm-chart
+        - name: whoami
           image: index.docker.io/containous/whoami
           imagePullPolicy: IfNotPresent
           ports:
@@ -61,18 +61,18 @@ spec:
           resources:
             {}
 ---
-# Source: whoami-helm-chart/templates/ingress.yaml
+# Source: whoami/templates/ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: whoami-whoami-helm-chart
+  name: whoami
   annotations:
     ingress.kubernetes.io/auth-type: forward
     ingress.kubernetes.io/auth-url: http://forwardauth/authorize
     ingress.kubernetes.io/auth-response-headers: Authorization,X-FORWARDAUTH-NAME,X-FORWARDAUTH-SUB,X-FORWARDAUTH-EMAIL
   labels:
-    app: whoami-helm-chart
-    chart: whoami-helm-chart-0.1.0
+    app: whoami
+    chart: whoami-0.1.0
     release: whoami
     heritage: Tiller
 spec:
@@ -82,5 +82,5 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: whoami-whoami-helm-chart
+              serviceName: whoami
               servicePort: http
