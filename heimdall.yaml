@@ -1,0 +1,89 @@
+---
+# Source: heimdall/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: heimdall
+  labels:
+    app: heimdall
+    chart: heimdall-0.1.0
+    release: heimdall
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: heimdall
+    release: heimdall
+---
+# Source: heimdall/templates/deployment.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: heimdall
+  labels:
+    app: heimdall
+    chart: heimdall-0.1.0
+    release: heimdall
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heimdall
+      release: heimdall
+  template:
+    metadata:
+      labels:
+        app: heimdall
+        release: heimdall
+    spec:
+      containers:
+        - name: heimdall
+          image: index.docker.io/linuxserver/heimdall
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+          resources:
+            {}
+---
+# Source: heimdall/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: heimdall
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+#  annotations:
+#    ingress.kubernetes.io/auth-type: forward
+#    ingress.kubernetes.io/auth-url: http://forwardauth/authorize
+#    ingress.kubernetes.io/auth-response-headers: Authorization,X-FORWARDAUTH-NAME,X-FORWARDAUTH-SUB,X-FORWARDAUTH-EMAIL
+  labels:
+    app: heimdall
+    chart: heimdall-0.1.0
+    release: heimdall
+    heritage: Tiller
+spec:
+  rules:
+    - host: heimdall.dniel.in
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: heimdall
+              servicePort: http

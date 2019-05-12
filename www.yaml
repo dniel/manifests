@@ -32,3 +32,32 @@ spec:
             periodSeconds: 10
             tcpSocket:
               port: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: www
+  namespace: blogr
+spec:
+  selector:
+    app: www
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: www
+  namespace: blogr
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: www.dniel.se
+    http:
+      paths:
+      - backend:
+          serviceName: www
+          servicePort: 80

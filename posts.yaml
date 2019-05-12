@@ -1,0 +1,53 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: api-posts
+  namespace: blogr
+  labels:
+    app: api-posts
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-posts
+  template:
+    metadata:
+      labels:
+        app: api-posts
+    spec:
+      containers:
+      - name: api-posts
+        image: index.docker.io/dniel/api-posts
+        ports:
+        - containerPort: 4567
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: api-posts
+  namespace: blogr
+spec:
+  selector:
+    app: api-posts
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 4567
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+  name: api-posts
+  namespace: blogr
+spec:
+  rules:
+  - host: api.dniel.in
+    http:
+      paths:
+      - backend:
+          serviceName: api-posts
+          servicePort: 80
+        path: /posts
