@@ -1,5 +1,4 @@
 ---
-# Just a dummy commit to trigger deployment
 # Source: forwardauth/templates/configmap.yaml
 #apiVersion: v1
 #kind: ConfigMap
