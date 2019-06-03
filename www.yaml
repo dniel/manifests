@@ -17,7 +17,7 @@ spec:
         app: www
     spec:
       containers:
-        - image: index.docker.io/dniel/blogr-www
+        - image: index.docker.io/dniel/www
           livenessProbe:
             httpGet:
               path: /
