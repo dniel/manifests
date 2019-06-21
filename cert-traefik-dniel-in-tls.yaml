@@ -1,0 +1,19 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: traefik-default
+spec:
+  secretName: traefik-default-tls
+  renewBefore: 360h # 15d
+  commonName: '*.dniel.in'
+  dnsNames:
+  - '*.dniel.in'
+  issuerRef:
+    name: letsencrypt-prod-issuer
+    kind: ClusterIssuer
+  acme:
+    config:
+    - dns01:
+        provider: dniel-in-dns
+      domains:
+      - '*.dniel.in'
