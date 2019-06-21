@@ -32,7 +32,7 @@ spec:
       containers:
       - args:
         - --configfile=/config/traefik.toml
-        image: index.docker.io/traefik
+        image: index.docker.io/library/traefik
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
