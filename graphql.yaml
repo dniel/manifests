@@ -20,7 +20,7 @@ spec:
         - image: index.docker.io/dniel/api-graphql
           livenessProbe:
             httpGet:
-              path: /
+              path: /graphql
               port: 8080
             periodSeconds: 3
           name: api-graphql
