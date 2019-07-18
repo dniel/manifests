@@ -18,17 +18,17 @@ spec:
     spec:
       containers:
         - image: index.docker.io/dniel/api-graphql
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8080
-            periodSeconds: 3
           name: api-graphql
           ports:
             - containerPort: 8080
-          readinessProbe:
+          livenessProbe:
             periodSeconds: 3
             tcpSocket:
+              port: 8080
+          readinessProbe:
+            periodSeconds: 3
+            httpGet:
+              path: /system/health
               port: 8080
 ---
 kind: Service
