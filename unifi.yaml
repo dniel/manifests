@@ -1,19 +1,10 @@
 ---
-# Source: forwardauth/templates/configmap.yaml
-#apiVersion: v1
-#kind: ConfigMap
-#metadata:
-#  name: forwardauth-config
-#  labels:
-#    app: forwardauth
-#    chart: forwardauth-0.1.0
-#    release: forwardauth
-#    heritage: ---
 # Source: unifi/templates/pvc.yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: unifi
+  namespace: unifi
   labels:
     app: unifi
     chart: "unifi-0.4.0"
@@ -24,13 +15,14 @@ spec:
     - "ReadWriteOnce"
   resources:
     requests:
-      storage: "5Gi"
+      storage: "20Gi"
 ---
 # Source: unifi/templates/controller-svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: unifi-controller
+  namespace: unifi
   labels:
     app.kubernetes.io/name: unifi
     helm.sh/chart: unifi-0.4.0
@@ -49,32 +41,33 @@ spec:
     app.kubernetes.io/instance: unifi
 ---
 # Source: unifi/templates/discovery-svc.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: unifi-discovery
-  labels:
-    app.kubernetes.io/name: unifi
-    helm.sh/chart: unifi-0.4.0
-    app.kubernetes.io/instance: unifi
-    app.kubernetes.io/managed-by: Tiller
-spec:
-  type: ClusterIP
-  ports:
-    - port: 10001
-      targetPort: discovery
-      protocol: UDP
-      name: discovery
-
-  selector:
-    app.kubernetes.io/name: unifi
-    app.kubernetes.io/instance: unifi
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: unifi-discovery
+#  labels:
+#    app.kubernetes.io/name: unifi
+#    helm.sh/chart: unifi-0.4.0
+#    app.kubernetes.io/instance: unifi
+#    app.kubernetes.io/managed-by: Tiller
+#spec:
+#  type: ClusterIP
+#  ports:
+#    - port: 10001
+#      targetPort: discovery
+#      protocol: UDP
+#      name: discovery
+#
+#  selector:
+#    app.kubernetes.io/name: unifi
+#    app.kubernetes.io/instance: unifi
 ---
 # Source: unifi/templates/gui-svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: unifi-gui
+  namespace: unifi
   labels:
     app.kubernetes.io/name: unifi
     helm.sh/chart: unifi-0.4.0
@@ -93,32 +86,33 @@ spec:
     app.kubernetes.io/instance: unifi
 ---
 # Source: unifi/templates/stun-svc.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: unifi-stun
-  labels:
-    app.kubernetes.io/name: unifi
-    helm.sh/chart: unifi-0.4.0
-    app.kubernetes.io/instance: unifi
-    app.kubernetes.io/managed-by: Tiller
-spec:
-  type: ClusterIP
-  ports:
-    - port: 3478
-      targetPort: stun
-      protocol: UDP
-      name: stun
-
-  selector:
-    app.kubernetes.io/name: unifi
-    app.kubernetes.io/instance: unifi
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: unifi-stun
+#  labels:
+#    app.kubernetes.io/name: unifi
+#    helm.sh/chart: unifi-0.4.0
+#    app.kubernetes.io/instance: unifi
+#    app.kubernetes.io/managed-by: Tiller
+#spec:
+#  type: ClusterIP
+#  ports:
+#    - port: 3478
+#      targetPort: stun
+#      protocol: UDP
+#      name: stun
+#
+#  selector:
+#    app.kubernetes.io/name: unifi
+#    app.kubernetes.io/instance: unifi
 ---
 # Source: unifi/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: unifi
+  namespace: unifi
   labels:
     app.kubernetes.io/name: unifi
     helm.sh/chart: unifi-0.4.0
@@ -149,12 +143,12 @@ spec:
             - name: controller
               containerPort: 8080
               protocol: TCP
-            - name: discovery
-              containerPort: 10001
-              protocol: UDP
-            - name: stun
-              containerPort: 3478
-              protocol: UDP
+#            - name: discovery
+#              containerPort: 10001
+#              protocol: UDP
+#            - name: stun
+#              containerPort: 3478
+#              protocol: UDP
           securityContext:
             capabilities:
               add:
@@ -209,6 +203,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: unifi-gui
+  namespace: unifi
   labels:
     app.kubernetes.io/name: unifi
     helm.sh/chart: unifi-0.4.0
@@ -234,6 +229,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: unifi-inform
+  namespace: unifi
   labels:
     app.kubernetes.io/name: unifi
     helm.sh/chart: unifi-0.4.0
