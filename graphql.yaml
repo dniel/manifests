@@ -40,22 +40,6 @@ spec:
   selector:
     app: api-graphql
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: api-graphql
-  namespace: blogr
-  annotations:
-    kubernetes.io/ingress.class: traefik
-spec:
-  rules:
-  - host: api-graphql.dniel.se
-    http:
-      paths:
-      - backend:
-          serviceName: api-graphql
-          servicePort: 80
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

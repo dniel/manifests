@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+  name: api-posts
+  namespace: blogr
+spec:
+  rules:
+    - host: api-posts.dniel.in
+      http:
+        paths:
+          - backend:
+              serviceName: api-posts
+              servicePort: 80
