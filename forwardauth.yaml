@@ -1,18 +1,4 @@
 ---
-# Source: forwardauth/templates/configmap.yaml
-#apiVersion: v1
-#kind: ConfigMap
-#metadata:
-#  name: forwardauth-config
-#  labels:
-#    app: forwardauth
-#    chart: forwardauth-0.1.0
-#    release: forwardauth
-#    heritage: Tiller
-#data:
-#  application.yaml: TODO: add config here for spring boot app.
-
----
 # Source: forwardauth/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -69,7 +55,7 @@ spec:
               mountPath: /config
           env:
             - name: JVM_OPTS
-              value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1          
+              value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1
             - name: ENV
               value: "DEBUG"
           livenessProbe:
@@ -85,32 +71,8 @@ spec:
               memory: 512Mi
             requests:
               memory: 512Mi
-            
+
       volumes:
         - name: config-volume
           configMap:
             name: forwardauth-config
----
-# Source: forwardauth/templates/ingress.yaml
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: forwardauth
-  labels:
-    app: forwardauth
-    chart: forwardauth-0.1.0
-    release: forwardauth
-    heritage: Tiller
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.frontend.rule.type: PathPrefixStrip
-    traefik.ingress.kubernetes.io/priority: "99999"
-    
-spec:
-  rules:
-  - http:
-      paths:
-        - backend:
-            serviceName: forwardauth
-            servicePort: http
-          path: /oauth2

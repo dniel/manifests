@@ -1,0 +1,46 @@
+---
+# Source: forwardauth/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: forwardauth
+  labels:
+    app: forwardauth
+    chart: forwardauth-0.1.0
+    release: forwardauth
+    heritage: Tiller
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+    traefik.ingress.kubernetes.io/priority: "99999"
+    
+spec:
+  rules:
+  - http:
+      paths:
+        - backend:
+            serviceName: forwardauth
+            servicePort: http
+          path: /oauth2
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: forwardauth-host
+  labels:
+    app: forwardauth
+    chart: forwardauth-0.1.0
+    release: forwardauth
+    heritage: Tiller
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    
+spec:
+  rules:
+  - host: auth.dniel.in 
+    http:
+      paths:
+        - backend:
+            serviceName: forwardauth
+            servicePort: http
