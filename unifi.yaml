@@ -217,7 +217,7 @@ metadata:
     
 spec:
   rules:
-    - host: unifi.dniel.se
+    - host: unifi.dniel.in
       http:
         paths:
           - backend:
@@ -240,10 +240,11 @@ metadata:
     
 spec:
   rules:
-    - host: unifi.dniel.se
+    - host: unifi.dniel.in
       http:
         paths:
           - path: /inform
             backend:
               serviceName: unifi-controller
               servicePort: controller
+>>>>>>> 48fc50bde7de8df7f8ee25249f7a6ccf70b12249
