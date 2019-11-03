@@ -247,4 +247,3 @@ spec:
             backend:
               serviceName: unifi-controller
               servicePort: controller
->>>>>>> 48fc50bde7de8df7f8ee25249f7a6ccf70b12249
