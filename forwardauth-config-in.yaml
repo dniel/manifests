@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: forwardauth
+    chart: forwardauth-0.1.0
+    heritage: Tiller
+    release: forwardauth
+  name: forwardauth-config
+  namespace: default
+data:
+  application.yaml: |
+    spring.profiles.active: DEV
+    domain: https://dniel.eu.auth0.com/
+    token-endpoint: https://dniel.eu.auth0.com/oauth/token
+    authorize-url: https://dniel.eu.auth0.com/authorize
+    userinfo-endpoint: https://dniel.eu.auth0.com/userinfo
+    logout-endpoint:  https://dniel.eu.auth0.com/v2/logout
+
+    default:
+      name: default
+      audience: https://dniel.in
+      scope: "profile openid email"
+      redirect-uri: https://auth.dniel.in/signin
+      token-cookie-domain: dniel.in
+      claims:
+      - sub
+      - name
+      - email
+
+    apps:
+    - name: grafana.dniel.in
+      required-permissions:
+      - read:grafana
+    - name: kibana.dniel.in
+      required-permissions:
+      - read:kibana
+    - name: traefik.dniel.in
+      required-permissions:
+      - read:traefik
+    - name: whoami.dniel.in
+      required-permissions:
+      - read:whoami
+    - name: www.dniel.in
+      required-permissions:
+      - read:www
+      restricted-methods:
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+    - name: spin.dniel.in
+      required-permissions:
+      - read:spinnaker
+    - name: unifi.dniel.in
+      required-permissions:
+      - read:unifi
+    - name: heimdall.dniel.in
+      required-permissions:
+      - read:heimdall
+    - name: api-grahpql.dniel.in
+      required-permissions:
+      - read:graphql
+    - name: api-posts.dniel.in
+      required-permissions:
+      - read:posts
