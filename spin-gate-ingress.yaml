@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: spin-gate
+  namespace: spinnaker
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: spin.dniel.in
+      http:
+        paths:
+          - backend:
+              serviceName: spin-deck
+              servicePort: 8084
+            path: /api
