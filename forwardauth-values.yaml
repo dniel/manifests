@@ -23,13 +23,7 @@ authorizeUrl: https://dniel.eu.auth0.com/authorize
 # as environmentvariables to container and inject values from
 # secrets instead of from application.yaml
 default:
-  name: ${domain}
-  clientid: ${clientid}
-  clientsecret: ${clientsecret}
-  audience: https://${domain}
   scope: "profile openid email"
-  redirectToUri: http://auth.${domain}/signin
-  tokenCookieDomain: ${domain}
 
 # Access ForwardAuth in two different configuration modes.
 mode:
@@ -54,7 +48,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: auth.${domain}
+  hostname: auth.example.com
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
