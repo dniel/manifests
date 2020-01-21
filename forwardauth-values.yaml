@@ -22,8 +22,7 @@ authorizeUrl: https://dniel.eu.auth0.com/authorize
 # set the default application client-id and client-secret
 # as environmentvariables to container and inject values from
 # secrets instead of from application.yaml
-default:
-  scope: "profile openid email"
+default: {}
 
 # Access ForwardAuth in two different configuration modes.
 mode:
