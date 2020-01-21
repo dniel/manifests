@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: index.docker.io/dniel/forwardauth
-  tag: latest
+#  tag: latest
   pullPolicy: Always
 
 # set logLevel to DEBUG, TEST, or PRODUCTION to control the verbosity of logs
